@@ -1,6 +1,7 @@
 # This script is run (privileged) on the vagrant guest after running "vagrant up" for the first time
 #
-# You can set this script to run by modifying your Vagrantfile as follows:
+# You can set this script to run by modifying your Vagrantfile as follows,
+# changing the "args" parameter to suit your project:
 #
 #    config.vm.provision "shell" do |s|
 #        s.path = "vagrant-provision.sh"
