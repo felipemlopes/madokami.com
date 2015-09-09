@@ -1,4 +1,11 @@
-# This script is run (privileged) on the vagrant guest after running "vagrant up" for the first time
+# This script is run (privileged) on the vagrant guest after running "vagrant up" for the first time.
+# It will:
+# * Install required packages
+# * Install composer
+# * Update OS hostname
+# * Add apache vhost for this application and update any other required config
+# * Create the mysql database
+# * Generate a .env config file for the application and run other required tasks
 #
 # You can set this script to run by modifying your Vagrantfile as follows,
 # changing the "args" parameter to suit your project:
