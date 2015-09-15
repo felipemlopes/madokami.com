@@ -53,6 +53,9 @@ a2enconf server-name
 cd /vagrant
 composer install
 
+# Enable apache modules
+a2enmod rewrite
+
 # Add apache vhost config for application
 cat << 'EOF' > /etc/apache2/sites-available/vagrant.conf
 <VirtualHost *:80>
