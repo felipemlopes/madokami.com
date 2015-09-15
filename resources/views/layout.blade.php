@@ -3,51 +3,67 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
         <title>Madokami.com &middot; Kawaii File Hosting</title>
-        <link rel="shortcut icon" href=favicon.ico type="image/x-icon">
-        <link rel="stylesheet" href="{{ asset('css/madokami.css') }}">
+
+        <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
+        <link href="{{ asset('vendor/semantic/2.1.3/semantic.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('css/madokami.css') }}" rel="stylesheet" type="text/css">
     </head>
-    <body>
-        <div class="container">
-            <div class="jumbotron">
-                <h1>Ohayou!</h1>
+    <body ng-app="app">
 
-                <p class="lead">Max upload size is 50MiB, read the <a href="faq.html">FAQ</a></p>
+        <div class="ui center aligned page grid" ng-controller="UploadController"
+             ng-init="uploadUrl = {{ json_encode(route('upload')) }};">
+            <div class="sixteen wide column">
+                <h1 class="ui header">Ohayou!</h1>
+
+                <div class="ui large header">Max upload size is 50MiB, read the <a href="faq.html">FAQ</a></div>
+
                 <noscript>
-                    <p class="alert alert-error"><strong>Enable JavaScript</strong> you fucking autist neckbeard, it's
-                        not gonna hurt you</p>
+                    <div class="ui negative message">
+                        <p>
+                            <strong>Enable JavaScript</strong> you fucking autist neckbeard, it's not gonna hurt you
+                        </p>
+                    </div>
                 </noscript>
-                <p id="no-file-api" class="alert alert-error">
-                    <strong>Your browser is shit.</strong> Install the latest<a href="http://firefox.com/">Firefox</a>
-                    or <a href="http://chrome.google.com/">Botnet</a> and come back &lt;3
-                </p>
-                <a href="javascript:;" id="upload-btn" class="btn">Select <span>or drop </span>file(s)</a>
-                <input type="file" id="upload-input" name="files[]" multiple data-max-size="50MiB">
-                <ul id="upload-filelist"></ul>
-            </div>
 
-            <nav>
-                <ul>
-                    <li>
-                        <a href="https://madokami.com/">Home</a></li>
-                    <li>
-                        <a href="https://fufufu.moe/">Board</a></li>
-                    <li>
-                        <a href="https://github.com/kimoi/Pomf">Github</a></li>
-                    <li>
-                </ul>
-            </nav>
-            <script src="{{ asset('js/madokami.js') }}"></script>
+                <a class="ui massive positive upload button" ngf-select ng-model="uploading"
+                   ngf-multiple="true">Select or drop file(s)</a>
+            </div>
+            <div class="eleven wide centered column">
+                <table class="ui very basic table">
+                    <tbody>
+                        <tr ng-repeat="file in uploading">
+                            <td>
+                                <span>@{{ file.name }} (@{{ file.size | formatFileSize }})</span>
+                            </td>
+                            <td class="right aligned">
+                                <div class="ui inverted progress" data-percent="@{{ file.progressPercentage }}"
+                                     ng-class="{ success: (file.progressPercentage === 100) }">
+                                    <div class="bar"
+                                         style="transition-duration: 300ms; -webkit-transition-duration: 300ms;"
+                                         ng-style="{ width: (file.progressPercentage + '%') }">
+                                        <div class="progress">@{{ file.progressPercentage }}%</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">
+                                <strong>Generating URLs...</strong>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
 
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        <script src="{{ URL::asset('vendor/angular/1.4.3/angular.js') }}"></script>
+        <script src="{{ URL::asset('vendor/ng-file-upload/5.0.9/ng-file-upload.js') }}"></script>
+        <script src="{{ asset('js/madokami.js') }}"></script>
 
-            ga('create', 'UA-53705363-3', 'auto');
-            ga('send', 'pageview');
-        </script>
+        @include('partials.analytics')
     </body>
 </html>
