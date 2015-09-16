@@ -6,7 +6,7 @@
  * Time: 00:08
  */
 
-namespace App\Models;
+namespace Madokami\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

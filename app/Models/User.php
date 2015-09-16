@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Madokami\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;

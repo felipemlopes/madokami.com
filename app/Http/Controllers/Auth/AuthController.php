@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace Madokami\Http\Controllers\Auth;
 
-use App\User;
+use Madokami\User;
 use Validator;
-use App\Http\Controllers\Controller;
+use Madokami\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 

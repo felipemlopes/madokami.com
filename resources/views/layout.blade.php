@@ -30,7 +30,7 @@
                 <a class="ui massive positive upload button" ngf-select ng-model="uploading"
                    ngf-multiple="true">Select or drop file(s)</a>
             </div>
-            <div class="eleven wide centered column">
+            <div class="eleven wide centered column" ng-show="uploading.length > 0">
                 <table class="ui very basic table">
                     <tbody>
                         <tr ng-repeat="file in uploading">

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Madokami\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
