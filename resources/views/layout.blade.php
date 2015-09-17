@@ -7,7 +7,7 @@
         <title>Madokami.com &middot; Kawaii File Hosting</title>
 
         <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
-        <link href="{{ asset('vendor/semantic/2.1.3/semantic.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('vendor/semantic/2.1.4/semantic.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('css/madokami.css') }}" rel="stylesheet" type="text/css">
     </head>
     <body ng-app="app">
@@ -49,13 +49,6 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="2">
-                                <strong>Generating URLs...</strong>
-                            </th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>
@@ -65,5 +58,5 @@
         <script src="{{ asset('js/madokami.js') }}"></script>
 
         @include('partials.analytics')
-    </body>
+    </body>z
 </html>

@@ -26,7 +26,7 @@
 
                         evt.config.file.progressPercentage = progressPercentage;
                     }).success(function (data, status, headers, config) {
-                        console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                        console.log('file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data)dd2);
                     }).error(function (data, status, headers, config) {
                         console.log('error status: ' + status, data, headers, config);
                     })
