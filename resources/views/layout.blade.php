@@ -28,7 +28,7 @@
                 </noscript>
 
                 <a class="ui massive positive upload button" ngf-select="uploadFiles($files)"
-                   ngf-multiple="true">Select or drop file(s)</a>
+                   ngf-multiple="true">Select file(s)</a>
             </div>
             <div class="eleven wide centered column" ng-show="uploading.length > 0">
                 <table class="ui very basic table">
@@ -50,7 +50,7 @@
                                     </div>
                                 </div>
 
-                                <a ng-href="file.url" target="_blank" ng-show="file.url">@{{ file.url }}</a>
+                                <a ng-href="@{{ file.url }}" target="_blank" ng-show="file.url">@{{ file.url }}</a>
                             </td>
                         </tr>
                     </tbody>
