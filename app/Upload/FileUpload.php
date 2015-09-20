@@ -25,6 +25,9 @@ class FileUpload {
         // Create SHA-256 hash of file
         $fileHash = hash_file('sha256', $file->getPathname());
 
+        // Get filesize
+        $filesize = $file->getSize();
+
         // Move the file
         $uploadDirectory = config('upload.directory');
         $file->move($uploadDirectory, $generatedName);
@@ -33,7 +36,7 @@ class FileUpload {
         $record = FileRecord::create([
             'client_name' => $file->getClientOriginalName(),
             'generated_name' => $generatedName,
-            'filesize' => $file->getSize(),
+            'filesize' => $filesize,
             'hash' => $fileHash,
             'uploaded_by_ip' => $request->getClientIp(),
         ]);
