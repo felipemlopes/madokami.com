@@ -5,11 +5,8 @@
         $scope.uploadUrl = null;
         $scope.uploading = [ ];
 
-        $scope.$watch('uploading', function () {
-            $scope.upload($scope.uploading);
-        });
 
-        $scope.upload = function (files) {
+        $scope.uploadFiles = function (files) {
             if (files && files.length) {
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
@@ -26,10 +23,14 @@
 
                         evt.config.file.progressPercentage = progressPercentage;
                     }).success(function (data, status, headers, config) {
-                        console.log('file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data)dd2);
+                        if(data && data.url) {
+                            config.file.url = data.url;
+                        }
                     }).error(function (data, status, headers, config) {
                         console.log('error status: ' + status, data, headers, config);
-                    })
+                    });
+
+                    $scope.uploading.push(file);
                 }
             }
         };

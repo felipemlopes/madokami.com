@@ -27,25 +27,30 @@
                     </div>
                 </noscript>
 
-                <a class="ui massive positive upload button" ngf-select ng-model="uploading"
+                <a class="ui massive positive upload button" ngf-select="uploadFiles($files)"
                    ngf-multiple="true">Select or drop file(s)</a>
             </div>
             <div class="eleven wide centered column" ng-show="uploading.length > 0">
                 <table class="ui very basic table">
                     <tbody>
                         <tr ng-repeat="file in uploading">
-                            <td>
-                                <span>@{{ file.name }} (@{{ file.size | formatFileSize }})</span>
+                            <td class="one wide">
+                                <span>@{{ file.name }}</span>
+                            </td>
+                            <td class="one wide right aligned">
+                                @{{ file.size | formatFileSize }}
                             </td>
                             <td class="right aligned">
                                 <div class="ui inverted progress" data-percent="@{{ file.progressPercentage }}"
-                                     ng-class="{ success: (file.progressPercentage === 100) }">
+                                     ng-class="{ success: (file.progressPercentage === 100) }" ng-hide="file.url">
                                     <div class="bar"
                                          style="transition-duration: 300ms; -webkit-transition-duration: 300ms;"
                                          ng-style="{ width: (file.progressPercentage + '%') }">
                                         <div class="progress">@{{ file.progressPercentage }}%</div>
                                     </div>
                                 </div>
+
+                                <a ng-href="file.url" target="_blank" ng-show="file.url">@{{ file.url }}</a>
                             </td>
                         </tr>
                     </tbody>
@@ -58,5 +63,5 @@
         <script src="{{ asset('js/madokami.js') }}"></script>
 
         @include('partials.analytics')
-    </body>z
+    </body>
 </html>
