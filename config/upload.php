@@ -8,6 +8,14 @@
 
 return [
 
+    /*
+     * Target directory for uploads
+     */
     'directory' => storage_path('uploads'),
+
+    /*
+     * Max upload filesize in bytes
+     */
+    'max_size' => (2 * pow(1024, 2)),
 
 ];

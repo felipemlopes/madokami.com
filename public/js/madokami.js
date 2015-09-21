@@ -3,32 +3,44 @@
     module.controller('UploadController', function($scope, Upload) {
 
         $scope.uploadUrl = null;
+        $scope.maxUploadSize = null;
         $scope.uploading = [ ];
+        $scope.dropped = [ ];
 
+        $scope.$watch('dropped', function(newValue) {
+            $scope.uploadFiles(newValue);
+        });
 
         $scope.uploadFiles = function (files) {
             if (files && files.length) {
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
 
-                    file.progressPercentage = 0;
+                    if(file.size > $scope.maxUploadSize) {
+                        file.progressPercentage = 100;
+                        file.error = 'onii-chan y-your upload is t-too big…';
+                    }
+                    else {
+                        file.progressPercentage = 0;
 
-                    Upload.upload({
-                        url: $scope.uploadUrl,
-                        fields: { },
-                        file: file
-                    }).progress(function (evt) {
-                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                        console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                        Upload.upload({
+                            url: $scope.uploadUrl,
+                            fields: {},
+                            file: file
+                        }).progress(function (evt) {
+                            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                            console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
 
-                        evt.config.file.progressPercentage = progressPercentage;
-                    }).success(function (data, status, headers, config) {
-                        if(data && data.url) {
-                            config.file.url = data.url;
-                        }
-                    }).error(function (data, status, headers, config) {
-                        console.log('error status: ' + status, data, headers, config);
-                    });
+                            evt.config.file.progressPercentage = progressPercentage;
+                        }).success(function (data, status, headers, config) {
+                            if (data && data.url) {
+                                config.file.url = data.url;
+                            }
+                        }).error(function (data, status, headers, config) {
+                            console.log('error status: ' + status, data, headers, config);
+                        });
+
+                    }
 
                     $scope.uploading.push(file);
                 }

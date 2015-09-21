@@ -11,6 +11,7 @@ namespace Madokami\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Madokami\Exceptions\NoFileException;
+use Madokami\Formatters\FileSizeFormatter;
 use Madokami\Models\FileRecord;
 use Madokami\Upload\FileUpload;
 use Storage;
@@ -25,7 +26,12 @@ class HomeController extends Controller {
 
     public function home() {
 
-        return view('home');
+        $maxUploadSize = config('upload.max_size');
+        $displayMaxUploadSize = FileSizeFormatter::format($maxUploadSize);
+
+        return view('home')
+            ->with('maxUploadSize', $maxUploadSize)
+            ->with('displayMaxUploadSize', $displayMaxUploadSize);
     }
 
     public function upload(Request $request) {

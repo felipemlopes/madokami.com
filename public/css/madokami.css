@@ -36,3 +36,7 @@ h1.ui.header {
 td .ui.progress {
     margin-bottom: 0;
 }
+
+#drop {
+    min-height: 100%;
+}
