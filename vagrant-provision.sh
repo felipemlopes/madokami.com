@@ -61,9 +61,30 @@ cat << 'EOF' > /etc/apache2/sites-available/vagrant.conf
 <VirtualHost *:80>
     DocumentRoot /vagrant/public
 
-    <Directory /vagrant>
-        AllowOverride All
+    <Directory /vagrant/public>
         Require all granted
+
+        RewriteEngine On
+
+        # Redirect Trailing Slashes If Not A Folder...
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+        # Handle uploaded files
+        RewriteCond /vagrant/storage/uploads/$1 -f
+        RewriteRule (.*) /uploads/$1 [L]
+
+        # Handle Front Controller...
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^ index.php [L]
+    </Directory>
+
+    Alias /uploads /vagrant/storage/uploads
+    <Directory /vagrant/storage/uploads>
+        Options -FollowSymLinks -ExecCGI
+        Require all granted
+        php_flag engine off
     </Directory>
 
     ErrorLog ${APACHE_LOG_DIR}/error.log
