@@ -16,6 +16,6 @@ return [
     /*
      * Max upload filesize in bytes
      */
-    'max_size' => (2 * pow(1024, 2)),
+    'max_size' => (50 * pow(1024, 2)),
 
 ];
