@@ -57,7 +57,8 @@
                                         <div class="bar"
                                              style="transition-duration: 300ms; -webkit-transition-duration: 300ms;"
                                              ng-style="{ width: (file.progressPercentage + '%') }">
-                                            <div class="progress">@{{ file.progressPercentage }}%</div>
+                                            <div class="progress" ng-if="!file.error">@{{ file.progressPercentage }}%</div>
+                                            <div class="progress" ng-if="file.error">Error</div>
                                         </div>
                                         <div class="label" ng-show="file.error">@{{ file.error }}</div>
                                     </div>
@@ -71,6 +72,15 @@
             </div>
 
         </div>
+
+        <style>
+            body {
+                background: url(/img/grills/{{ str_pad(mt_rand(1, 9), 2, '0', STR_PAD_LEFT) }}.png), url(img/bg.png);
+                background-position: 85% 100%,top left;
+                background-repeat: no-repeat,repeat;
+                background-size: 25vh, auto;
+            }
+        </style>
 
         <script src="{{ asset('vendor/angular/1.4.3/angular.js') }}"></script>
         <script src="{{ asset('vendor/ng-file-upload/5.0.9/ng-file-upload.js') }}"></script>

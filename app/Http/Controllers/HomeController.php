@@ -18,6 +18,7 @@ use Storage;
 
 class HomeController extends Controller {
 
+    /** @var FileUpload $fileUpload */
     protected $fileUpload;
 
     public function __construct(FileUpload $fileUpload) {
