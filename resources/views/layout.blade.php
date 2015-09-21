@@ -17,6 +17,7 @@
                       maxUploadSize = {{ json_encode($maxUploadSize) }};"
              ngf-drop ng-model="dropped"
              ngf-drag-over-class="dragover"
+             ngf-drop-available="dropSupported"
              ngf-multiple="true"
              ngf-allow-dir="true">
 
@@ -35,7 +36,9 @@
                     </noscript>
 
                     <a class="ui massive positive upload button" ngf-select="uploadFiles($files)"
-                       ngf-multiple="true">Select or drop file(s)</a>
+                       ngf-multiple="true">
+                        <span>Select <span ng-show="dropSupported">or drop</span> file(s)</span>
+                    </a>
                 </div>
                 <div class="eleven wide centered column" ng-show="uploading.length > 0">
                     <table class="ui very basic table">

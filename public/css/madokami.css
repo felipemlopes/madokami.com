@@ -40,3 +40,17 @@ td .ui.progress {
 #drop {
     min-height: 100%;
 }
+
+.dragover .ui.upload.button {
+    background-color: #16ab39 !important;
+    color: #ffffff;
+    text-shadow: none;
+}
+
+.dragover .ui.upload.button:before {
+    content: 'Drop it here~';
+}
+
+.dragover .ui.upload.button > span {
+    display: none;
+}

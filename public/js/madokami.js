@@ -4,6 +4,7 @@
 
         $scope.uploadUrl = null;
         $scope.maxUploadSize = null;
+        $scope.dropSupported = null;
         $scope.uploading = [ ];
         $scope.dropped = [ ];
 
