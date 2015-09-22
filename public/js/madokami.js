@@ -19,10 +19,12 @@
 
                     if(file.size > $scope.maxUploadSize) {
                         file.progressPercentage = 100;
-                        file.error = 'onii-chan y-your upload is t-too big…';
+                        file.label = 'onii-chan y-your upload is t-too big…';
+                        file.error = true;
                     }
                     else {
                         file.progressPercentage = 0;
+                        file.label = 'Uploading';
 
                         Upload.upload({
                             url: $scope.uploadUrl,
@@ -30,9 +32,11 @@
                             file: file
                         }).progress(function (evt) {
                             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                            console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
-
                             evt.config.file.progressPercentage = progressPercentage;
+
+                            if(progressPercentage === 100) {
+                                evt.config.file.label = 'Finalising';
+                            }
                         }).success(function (data, status, headers, config) {
                             if (data && data.url) {
                                 config.file.url = data.url;

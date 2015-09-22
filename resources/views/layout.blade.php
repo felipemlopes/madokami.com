@@ -71,7 +71,7 @@
                                             <div class="progress" ng-if="!file.error">@{{ file.progressPercentage }}%</div>
                                             <div class="progress" ng-if="file.error">Error</div>
                                         </div>
-                                        <div class="label" ng-show="file.error">@{{ file.error }}</div>
+                                        <div class="label" ng-show="file.label">@{{ file.label }}</div>
                                     </div>
 
                                     <a ng-href="@{{ file.url }}" target="_blank" ng-show="file.url">@{{ file.url }}</a>
