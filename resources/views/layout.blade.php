@@ -62,8 +62,8 @@
                                     @{{ file.size | formatFileSize }}
                                 </td>
                                 <td class="right aligned">
-                                    <div class="ui inverted progress" data-percent="@{{ file.progressPercentage }}"
-                                         ng-class="{ success: (file.progressPercentage === 100), error: file.error }"
+                                    <div class="ui progress" data-percent="@{{ file.progressPercentage }}"
+                                         ng-class="{ success: ((file.progressPercentage === 100) && !file.error), error: file.error }"
                                          ng-hide="file.url">
                                         <div class="bar"
                                              style="transition-duration: 300ms; -webkit-transition-duration: 300ms;"

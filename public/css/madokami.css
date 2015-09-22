@@ -46,6 +46,7 @@ td .ui.progress {
 
 .ui.progress {
     margin-bottom: 0 !important;
+    background: none;
 }
 
 .ui.progress > .label {

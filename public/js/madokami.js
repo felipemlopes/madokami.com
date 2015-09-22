@@ -24,7 +24,7 @@
                     }
                     else {
                         file.progressPercentage = 0;
-                        file.label = 'Uploading';
+                        file.label = null;
 
                         Upload.upload({
                             url: $scope.uploadUrl,
