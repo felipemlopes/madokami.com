@@ -8,6 +8,8 @@
 
         <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
 
+        <link href="{{ asset('/vendor/semantic/2.1.4/components/icon.min.css') }}" rel="stylesheet" type="text/css">
+
         {!! Minify::stylesheet([
             '/vendor/semantic/2.1.4/components/site.css',
             '/vendor/semantic/2.1.4/components/reset.css',
@@ -17,7 +19,6 @@
             '/vendor/semantic/2.1.4/components/button.css',
             '/vendor/semantic/2.1.4/components/table.css',
             '/vendor/semantic/2.1.4/components/progress.css',
-            '/vendor/semantic/2.1.4/components/icon.css',
             '/css/madokami.css' ])->withFullUrl() !!}
     </head>
     <body ng-app="app">
