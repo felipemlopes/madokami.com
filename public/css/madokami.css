@@ -7,6 +7,10 @@ body {
     background: url(/img/bg.png);
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
 .ui.page.grid {
     padding-top: 10vh;
 }

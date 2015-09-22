@@ -40,7 +40,7 @@
                         <span>Select <span ng-show="dropSupported">or drop</span> file(s)</span>
                     </a>
                 </div>
-                <div class="eleven wide centered column" ng-show="uploading.length > 0">
+                <div class="eleven wide centered column" ng-show="uploading.length > 0" ng-cloak>
                     <table class="ui very basic table">
                         <tbody>
                             <tr ng-repeat="file in uploading">
