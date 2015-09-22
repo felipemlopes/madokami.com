@@ -7,8 +7,17 @@
         <title>Madokami.com &middot; Kawaii File Hosting</title>
 
         <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
-        <link href="{{ asset('vendor/semantic/2.1.4/semantic.css') }}" rel="stylesheet" type="text/css">
-        <link href="{{ asset('css/madokami.css') }}" rel="stylesheet" type="text/css">
+
+        {!! Minify::stylesheet([
+            '/vendor/semantic/2.1.4/components/site.css',
+            '/vendor/semantic/2.1.4/components/reset.css',
+            '/vendor/semantic/2.1.4/components/grid.css',
+            '/vendor/semantic/2.1.4/components/header.css',
+            '/vendor/semantic/2.1.4/components/message.css',
+            '/vendor/semantic/2.1.4/components/button.css',
+            '/vendor/semantic/2.1.4/components/table.css',
+            '/vendor/semantic/2.1.4/components/progress.css',
+            '/css/madokami.css' ])->withFullUrl() !!}
     </head>
     <body ng-app="app">
         <div id="drop"
@@ -76,15 +85,16 @@
         <style>
             body {
                 background: url(/img/grills/{{ str_pad(mt_rand(1, 9), 2, '0', STR_PAD_LEFT) }}.png), url(img/bg.png);
-                background-position: 85% 100%,top left;
-                background-repeat: no-repeat,repeat;
+                background-position: 85% 100%, top left;
+                background-repeat: no-repeat, repeat;
                 background-size: 25vh, auto;
             }
         </style>
 
-        <script src="{{ asset('vendor/angular/1.4.3/angular.js') }}"></script>
-        <script src="{{ asset('vendor/ng-file-upload/5.0.9/ng-file-upload.js') }}"></script>
-        <script src="{{ asset('js/madokami.js') }}"></script>
+        {!! Minify::javascript([
+            '/vendor/angular/1.4.6/angular.js',
+            '/vendor/ng-file-upload/5.0.9/ng-file-upload.js',
+            '/js/madokami.js' ])->withFullUrl() !!}
 
         @include('partials.analytics')
     </body>
