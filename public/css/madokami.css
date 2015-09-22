@@ -69,3 +69,35 @@ td .ui.progress {
 .dragover .ui.upload.button > span {
     display: none;
 }
+
+footer#footer {
+    margin-top: 8vh;
+}
+
+nav#footer-nav {
+    text-align: center;
+    font-size: 2rem;
+}
+
+nav#footer-nav a {
+    color: inherit;
+}
+
+nav#footer-nav a .icon {
+    opacity: 0.8;
+    -webkit-transition: color 0.6s ease, transform 0.2s ease;
+    -moz-transition: color 0.6s ease, transform 0.2s ease;
+    -o-transition: color 0.6s ease, transform 0.2s ease;
+    -ms-transition: color 0.6s ease, transform 0.2s ease;
+    transition: color 0.6s ease, transform 0.2s ease;
+}
+
+nav#footer-nav a:hover .icon {
+    color: #000000;
+    opacity: 1;
+    -webkit-transform: scale(1.5);
+    -moz-transform: scale(1.5);
+    -o-transform: scale(1.5);
+    -ms-transform: scale(1.5);
+    transform: scale(1.5);
+}

@@ -17,6 +17,7 @@
             '/vendor/semantic/2.1.4/components/button.css',
             '/vendor/semantic/2.1.4/components/table.css',
             '/vendor/semantic/2.1.4/components/progress.css',
+            '/vendor/semantic/2.1.4/components/icon.css',
             '/css/madokami.css' ])->withFullUrl() !!}
     </head>
     <body ng-app="app">
@@ -80,6 +81,11 @@
                 </div>
             </div>
 
+            <footer id="footer">
+                <nav id="footer-nav">
+                    <a href="https://github.com/kimoi/madokami.com" target="_blank"><i class="github icon"></i></a>
+                </nav>
+            </footer>
         </div>
 
         <style>
