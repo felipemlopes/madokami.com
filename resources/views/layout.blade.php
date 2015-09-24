@@ -103,6 +103,6 @@
             '/vendor/ng-file-upload/5.0.9/ng-file-upload.js',
             '/js/madokami.js' ])->withFullUrl() !!}
 
-        @include('partials.analytics')
+        {{-- @include('partials.analytics') --}}
     </body>
 </html>
