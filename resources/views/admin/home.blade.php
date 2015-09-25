@@ -12,7 +12,7 @@
 @section('main')
     <div class="ui page grid">
         <div class="sixteen wide column">
-            <h2 class="ui header">Files ({{ $count }})</h2>
+            <h2 class="ui header">Files ({{ number_format($count) }})</h2>
 
             <form method="get" action="{{ Request::url() }}" class="ui form">
                 <div class="fields">
