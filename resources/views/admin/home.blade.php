@@ -11,8 +11,16 @@
 
 @section('main')
     <div class="ui page grid">
+        <div class="eight wide column">
+            <h2 class="ui header">
+                Files ({{ number_format($count) }})
+            </h2>
+        </div>
+        <div class="right aligned eight wide column">
+            <div class="ui large header">{{ $size }}</div>
+        </div>
+
         <div class="sixteen wide column">
-            <h2 class="ui header">Files ({{ number_format($count) }})</h2>
 
             <form method="get" action="{{ Request::url() }}" class="ui form">
                 <div class="fields">

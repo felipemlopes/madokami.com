@@ -15,7 +15,7 @@
             <div class="sixteen wide column">
                 <h1 class="ui header">Ohayou!</h1>
 
-                <div class="ui large header">Max upload size is {{ $displayMaxUploadSize }}.</div>
+                <div class="ui large upload header">Max upload size is {{ $displayMaxUploadSize }}.</div>
 
                 <noscript>
                     <div class="ui negative message">
