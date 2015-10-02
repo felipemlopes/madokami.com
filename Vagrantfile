@@ -1,6 +1,7 @@
 Vagrant.configure(2) do |config|
 
-    config.vm.box = "Debian 8.1 (Jessie) amd64"
+    config.vm.box = "kimoi/debian"
+    config.vm.box_url = "https://vagrant.madokami.com/metadata.json"
 
     config.vm.network "private_network", ip: "192.168.33.18"
 

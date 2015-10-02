@@ -141,6 +141,7 @@ MAIL_PASSWORD=null
 MAIL_ENCRYPTION=null
 EOF
 
-# Generate key
+# Application setup
 cd /vagrant
+php artisan migrate
 php artisan key:generate
