@@ -70,7 +70,7 @@
 
     <style>
         body {
-            background: url(/img/grills/{{ str_pad(mt_rand(1, 9), 2, '0', STR_PAD_LEFT) }}.png), url(img/bg.png);
+            background: url(/img/grills/{{ str_pad(mt_rand(1, 10), 2, '0', STR_PAD_LEFT) }}.png), url(img/bg.png);
             background-position: 85% 100%, top left;
             background-repeat: no-repeat, repeat;
             background-size: 25vh, auto;
