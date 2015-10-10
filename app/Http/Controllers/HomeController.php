@@ -15,6 +15,8 @@ use Madokami\Formatters\FileSizeFormatter;
 use Madokami\Models\FileRecord;
 use Madokami\Upload\FileUpload;
 use Storage;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class HomeController extends Controller {
 
@@ -36,14 +38,26 @@ class HomeController extends Controller {
     }
 
     public function upload(Request $request) {
-        if(!$request->hasFile('file')) {
+        if($request->files->count() === 0) {
             throw new NoFileException();
         }
+        else {
+            $exported = [ ];
 
-        $record = $this->fileUpload->uploadFile($request, 'file');
+            /** @var UploadedFile $file */
+            foreach($request->files as $file) {
+                if($file->isValid()) {
+                    $record = $this->fileUpload->uploadFile($file, $request->getClientIp());
+                    $exported[] = $record->toArray();
+                }
+                else {
+                    dd($file->getError(), $file->getErrorMessage());
+                    throw new UploadException();
+                }
+            }
 
-        return response()->json($record->toArray());
-
+            return response()->json([ 'success' => true, 'files' => $exported ]);
+        }
     }
 
 }

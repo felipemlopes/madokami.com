@@ -5,6 +5,7 @@ namespace Madokami\Exceptions;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -46,6 +47,33 @@ class Handler extends ExceptionHandler
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
 
-        return parent::render($request, $e);
+        if($request->acceptsJson()) {
+            // Provide JSON response
+            $response = [ 'success' => false, 'error' => '' ];
+
+            // Set response HTTP code and headers
+            if($e instanceof HttpExceptionInterface) {
+                $code = $e->getStatusCode();
+                $headers = $e->getHeaders();
+            }
+            else {
+                $code = 500;
+                $headers = [ ];
+            }
+
+            if($e instanceof MaxUploadSizeException) {
+                $response['error'] = 'File too big.';
+            }
+            else {
+                $response['error'] = 'Server error.';
+            }
+
+            return response()->json($response, $code, $headers);
+
+        }
+        else {
+            // Normal HTML error page
+            return parent::render($request, $e);
+        }
     }
 }

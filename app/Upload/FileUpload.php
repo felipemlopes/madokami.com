@@ -11,14 +11,22 @@ namespace Madokami\Upload;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Madokami\Exceptions\MaxUploadSizeException;
+use Madokami\Exceptions\NoUniqueGeneratedNameException;
 use Madokami\Models\FileRecord;
 use Storage;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUpload {
 
-    public function uploadFile(Request $request, $fileKey) {
-        $file = $request->file($fileKey);
-
+    /**
+     * Upload provided file and create matching FileRecord object
+     *
+     * @param UploadedFile $file
+     * @param $clientIp
+     * @return FileRecord
+     */
+    public function uploadFile(UploadedFile $file, $clientIp) {
         $extension = Str::lower($file->getClientOriginalExtension());
         $generatedName = $this->generateName($extension);
 
@@ -28,22 +36,35 @@ class FileUpload {
         // Get filesize
         $filesize = $file->getSize();
 
+        // Check max upload size
+        $maxUploadSize = config('upload.max_size');
+        if($filesize > $maxUploadSize) {
+            throw new MaxUploadSizeException();
+        }
+
         // Move the file
         $uploadDirectory = config('upload.directory');
         $file->move($uploadDirectory, $generatedName);
 
         // Create the record
+        /** @var FileRecord $record */
         $record = FileRecord::create([
             'client_name' => $file->getClientOriginalName(),
             'generated_name' => $generatedName,
             'filesize' => $filesize,
             'hash' => $fileHash,
-            'uploaded_by_ip' => $request->getClientIp(),
+            'uploaded_by_ip' => $clientIp,
         ]);
 
         return $record;
     }
 
+    /**
+     * Generate a unique name for file
+     *
+     * @param $extension
+     * @return string
+     */
     protected function generateName($extension) {
         for($i = 0; $i < 10; $i++) {
             // 6 chars long
@@ -69,6 +90,9 @@ class FileUpload {
                 continue;
             }
         }
+
+        // 10 tries and still no unique name, throw exception
+        throw new NoUniqueGeneratedNameException();
     }
 
 }

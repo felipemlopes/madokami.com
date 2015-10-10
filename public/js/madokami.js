@@ -38,11 +38,22 @@
                                 evt.config.file.label = 'Finalising';
                             }
                         }).success(function (data, status, headers, config) {
-                            if (data && data.url) {
-                                config.file.url = data.url;
+                            if(data && data.files.length > 0) {
+                                config.file.url = data.files[0].url;
+                            }
+                            else {
+                                config.file.error = true;
+                                config.file.label = 'Unknown upload error.';
                             }
                         }).error(function (data, status, headers, config) {
-                            console.log('error status: ' + status, data, headers, config);
+                            config.file.error = true;
+
+                            if(data && data.error) {
+                                config.file.label = data.error;
+                            }
+                            else {
+                                config.file.label = 'Unknown upload error.';
+                            }
                         });
 
                     }
