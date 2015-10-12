@@ -29,6 +29,19 @@ class AdminController extends Controller {
     public function home(Request $request) {
         $filters = new Filters($request->get('filters'));
 
+        if($request->has('delete_and_ban')) {
+            $files = FileRecord::ip($filters->ip)->get();
+
+            foreach($files as $file) {
+                $file->delete();
+            }
+
+            Ban::createFromIp($filters->ip);
+
+            return redirect()->to($filters->url([ ], [ 'delete_and_ban' ]))
+                ->with('success', new MessageBag([ 'Files deleted and IP ban created' ]));
+        }
+
         $query = FileRecord::query()
             ->filter($filters);
 
@@ -48,14 +61,15 @@ class AdminController extends Controller {
             ->with('filters', $filters);
     }
 
-    public function ban(Request $request) {
-        $fileId = $request->get('file');
-        $file = FileRecord::findOrFail($fileId);
+    public function post(Request $request) {
+        if($request->has('delete')) {
+            $fileId = $request->get('delete');
+            $file = FileRecord::findOrFail($fileId);
+            $file->delete();
 
-        Ban::createFromFileRecord($file);
-
-        return redirect()->route('admin')
-            ->with('success', new MessageBag([ 'Ban created successfully' ]));
+            return redirect()->back()
+                ->with('success', new MessageBag([ 'File deleted' ]));
+        }
     }
 
 }

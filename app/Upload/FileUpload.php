@@ -116,7 +116,7 @@ class FileUpload {
             }
 
             // Check name is unique
-            $count = FileRecord::where('generated_name', '=', $generatedName)->count();
+            $count = FileRecord::withTrashed()->where('generated_name', '=', $generatedName)->count();
             if ($count === 0) {
                 // Unique, return the name
                 return $generatedName;

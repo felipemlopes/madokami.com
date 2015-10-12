@@ -3,23 +3,32 @@
 namespace Madokami\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Foundation\Inspiring;
 
-class Inspire extends Command
+class ScanFiles extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'inspire';
+    protected $signature = 'scan-files';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Display an inspiring quote';
+    protected $description = 'Scan uploads for infected files.';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     /**
      * Execute the console command.
@@ -28,6 +37,6 @@ class Inspire extends Command
      */
     public function handle()
     {
-        $this->comment(PHP_EOL.Inspiring::quote().PHP_EOL);
+
     }
 }

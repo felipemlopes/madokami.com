@@ -43,13 +43,19 @@
                     @endif
                 </div>
 
-                <button class="ui primary button">Search</button>
-                <a class="ui button" href="{{ Request::url() }}">Reset</a>
+                <div class="field">
+                    <button class="ui primary button">Search</button>
+                    <a class="ui button" href="{{ Request::url() }}">Reset</a>
+
+                    @if($filters->has('ip'))
+                        <button class="ui red right floated button" name="delete_and_ban" value="{{ $filters->ip }}">Delete all files and ban</button>
+                    @endif
+                </div>
             </form>
 
             <div class="ui divider"></div>
 
-            <form method="post" action="{{ route('admin.ban') }}">
+            <form method="post" action="{{ route('admin.post') }}">
                 {!! csrf_field() !!}
 
                 <table class="ui sortable celled table">
@@ -69,13 +75,14 @@
                                 </td>
                                 <td>
                                     <a href="{{ $file->url() }}" target="_blank">{{ $file->generated_name }}</a>
+                                    <button name="delete" value="{{ $file->id }}" class="ui red mini button">Delete</button>
                                 </td>
                                 <td>
                                     {{ $file->created_at }}
                                 </td>
                                 <td>
                                     <a href="{{ route('admin', [ 'filters' => [ 'ip' => $file->uploaded_by_ip ] ]) }}">{{ $file->uploaded_by_ip }}</a>
-                                    <button name="file" value="{{ $file->id }}" class="ui red mini button">Ban</button>
+                                    {{-- <button name="file" value="{{ $file->id }}" class="ui red mini button">Ban</button> --}}
                                 </td>
                             </tr>
                         @endforeach

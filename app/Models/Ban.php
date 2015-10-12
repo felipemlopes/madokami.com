@@ -22,4 +22,12 @@ class Ban extends Model {
         return $ban;
     }
 
+    public static function createFromIp($ip) {
+        $ban = Ban::create([
+            'ip' => $ip
+        ]);
+
+        return $ban;
+    }
+
 }

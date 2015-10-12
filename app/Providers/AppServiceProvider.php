@@ -3,6 +3,7 @@
 namespace Madokami\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Madokami\Models\FileRecord;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        FileRecord::deleted(function($fileRecord) {
+            $fileRecord->deleteFile();
+        });
     }
 
     /**
