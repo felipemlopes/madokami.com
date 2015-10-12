@@ -36,6 +36,12 @@ class FileUpload {
         // Create SHA-256 hash of file
         $fileHash = hash_file('sha256', $file->getPathname());
 
+        // Check if file already exists
+        $existingFile = FileRecord::where('hash', '=', $fileHash)->first();
+        if($existingFile) {
+            return $existingFile;
+        }
+
         // Query previous scans in VirusTotal for this file
         if(config('virustotal.enabled') === true) {
             $this->checkVirusTotalForHash($fileHash);
