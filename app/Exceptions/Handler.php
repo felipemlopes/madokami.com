@@ -68,6 +68,18 @@ class Handler extends ExceptionHandler
                 $response['error'] = 'Server error.';
             }
 
+            // Add exception to response if debug mode is turned on
+            if(config('app.debug') === true) {
+                $response['exception'] = [
+                    'exception' => get_class($e),
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTrace(),
+                    'file' => $e->getFile(),
+                    'file_line' => $e->getLine(),
+                ];
+            }
+
             return response()->json($response, $code, $headers);
 
         }

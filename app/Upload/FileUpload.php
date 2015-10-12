@@ -11,11 +11,14 @@ namespace Madokami\Upload;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Madokami\Exceptions\FileInfectedException;
 use Madokami\Exceptions\MaxUploadSizeException;
 use Madokami\Exceptions\NoUniqueGeneratedNameException;
 use Madokami\Models\FileRecord;
 use Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use VirusTotal\Exceptions\InvalidApiKeyException;
+use VirusTotal\File;
 
 class FileUpload {
 
@@ -32,6 +35,11 @@ class FileUpload {
 
         // Create SHA-256 hash of file
         $fileHash = hash_file('sha256', $file->getPathname());
+
+        // Query previous scans in VirusTotal for this file
+        if(config('virustotal.enabled') === true) {
+            $this->checkVirusTotalForHash($fileHash);
+        }
 
         // Get filesize
         $filesize = $file->getSize();
@@ -57,6 +65,28 @@ class FileUpload {
         ]);
 
         return $record;
+    }
+
+    protected function checkVirusTotalForHash($hash) {
+        try {
+            $virusTotalFile = new File(config('virustotal.api_key'));
+            $virusReport = $virusTotalFile->getReport($hash);
+        }
+        catch(\Exception $exception) {
+            // Swallow any exceptions raised while querying the API
+            return;
+        }
+
+        if (is_array($virusReport) && $virusReport['response_code'] === 1) {
+            // Make sure we have scan stats
+            if(isset($virusReport['total']) && isset($virusReport['positives'])) {
+                $detectionRatio = $virusReport['positives'] / $virusReport['total'];
+
+                if($detectionRatio >= config('virustotal.detection_threshold')) {
+                    throw new FileInfectedException();
+                }
+            }
+        }
     }
 
     /**

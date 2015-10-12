@@ -34,7 +34,7 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 
 # Install packages
 apt-get update
-apt-get -y install apache2 php5 php5-mysql php5-mcrypt mysql-server curl
+apt-get -y install apache2 php5 php5-mysql php5-mcrypt php5-curl mysql-server curl
 
 # Install composer
 curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/bin

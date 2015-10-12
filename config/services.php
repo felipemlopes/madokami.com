@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model'  => Madokami\User::class,
+        'model'  => Madokami\Models\User::class,
         'key'    => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
