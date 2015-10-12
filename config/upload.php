@@ -14,6 +14,11 @@ return [
     'directory' => storage_path('uploads'),
 
     /*
+     * Directory for deleted uploads
+     */
+    'deleted_directory' => storage_path('deleted'),
+
+    /*
      * Max upload filesize in bytes
      */
     'max_size' => (256 * pow(1024, 2)),

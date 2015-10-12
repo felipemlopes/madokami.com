@@ -90,7 +90,7 @@ class Filters implements \ArrayAccess, \Iterator {
     public function url($modify = [ ], $remove = [ ]) {
         $params = array_merge($this->filters, $modify);
         $params = array_diff_key($params, array_flip($remove));
-        return '?'.http_build_query([ 'filters' => $params ]);
+        return \URL::current().'?'.http_build_query([ 'filters' => $params ]);
     }
 
 }

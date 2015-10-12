@@ -9,10 +9,13 @@
 namespace Madokami\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Madokami\Filters\FilterableInterface;
 use Madokami\Filters\Filters;
 
 class FileRecord extends Model {
+
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -64,6 +67,14 @@ class FileRecord extends Model {
         $result['url'] = $this->url();
 
         return $result;
+    }
+
+    public function deleteFile() {
+        $source = config('upload.directory').'/'.$this->generated_name;
+        if(file_exists($source)) {
+            $target = config('upload.deleted_directory').'/'.$this->generated_name;
+            rename($source, $target);
+        }
     }
 
 }
