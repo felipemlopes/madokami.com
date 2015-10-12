@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
 
-        if($request->acceptsJson()) {
+        if($request->acceptsJson() && $request->ajax()) {
             // Provide JSON response
             $response = [ 'success' => false, 'error' => '' ];
 

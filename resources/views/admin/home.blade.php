@@ -22,6 +22,8 @@
 
         <div class="sixteen wide column">
 
+            @include('partials.messages')
+
             <form method="get" action="{{ Request::url() }}" class="ui form">
                 <div class="fields">
                     <div class="four wide field">
@@ -47,34 +49,39 @@
 
             <div class="ui divider"></div>
 
-            <table class="ui sortable celled table">
-                <thead>
-                    <tr>
-                        <th>Original</th>
-                        <th>File</th>
-                        <th>Uploaded</th>
-                        <th>IP</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($files as $file)
+            <form method="post" action="{{ route('admin.ban') }}">
+                {!! csrf_field() !!}
+
+                <table class="ui sortable celled table">
+                    <thead>
                         <tr>
-                            <td>
-                                {{ $file->client_name }}
-                            </td>
-                            <td>
-                                <a href="{{ $file->url() }}" target="_blank">{{ $file->generated_name }}</a>
-                            </td>
-                            <td>
-                                {{ $file->created_at }}
-                            </td>
-                            <td>
-                                <a href="{{ route('admin', [ 'filters' => [ 'ip' => $file->uploaded_by_ip ] ]) }}">{{ $file->uploaded_by_ip }}</a>
-                            </td>
+                            <th>Original</th>
+                            <th>File</th>
+                            <th>Uploaded</th>
+                            <th>IP</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($files as $file)
+                            <tr>
+                                <td>
+                                    {{ $file->client_name }}
+                                </td>
+                                <td>
+                                    <a href="{{ $file->url() }}" target="_blank">{{ $file->generated_name }}</a>
+                                </td>
+                                <td>
+                                    {{ $file->created_at }}
+                                </td>
+                                <td>
+                                    <a href="{{ route('admin', [ 'filters' => [ 'ip' => $file->uploaded_by_ip ] ]) }}">{{ $file->uploaded_by_ip }}</a>
+                                    <button name="file" value="{{ $file->id }}" class="ui red mini button">Ban</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </form>
 
             {!! $files->render() !!}
         </div>

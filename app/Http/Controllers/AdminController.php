@@ -11,8 +11,10 @@ namespace Madokami\Http\Controllers;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
 use Madokami\Filters\Filters;
 use Madokami\Formatters\FileSizeFormatter;
+use Madokami\Models\Ban;
 use Madokami\Models\FileRecord;
 use DB;
 
@@ -44,6 +46,16 @@ class AdminController extends Controller {
             ->with('size', $size)
             ->with('files', $files)
             ->with('filters', $filters);
+    }
+
+    public function ban(Request $request) {
+        $fileId = $request->get('file');
+        $file = FileRecord::findOrFail($fileId);
+
+        Ban::createFromFileRecord($file);
+
+        return redirect()->route('admin')
+            ->with('success', new MessageBag([ 'Ban created successfully' ]));
     }
 
 }
