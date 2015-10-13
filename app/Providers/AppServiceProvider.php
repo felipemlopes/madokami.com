@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        FileRecord::deleted(function($fileRecord) {
+        FileRecord::deleting(function($fileRecord) {
             $fileRecord->deleteFile();
         });
     }
