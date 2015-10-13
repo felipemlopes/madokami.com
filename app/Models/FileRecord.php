@@ -45,7 +45,10 @@ class FileRecord extends Model {
     }
 
     public function scopeSearch($query, $search) {
-        return $query->where('client_name', 'like', '%'.$search.'%');
+        return $query->whereNested(function($nested) use($search) {
+            $nested->where('client_name', 'LIKE', '%'.$search.'%')
+                ->orWhere('generated_name', 'LIKE', '%'.$search.'%');
+        });
     }
 
     public function scopeIp($query, $ip) {
