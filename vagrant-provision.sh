@@ -39,6 +39,10 @@ apt-get -y install apache2 php5 php5-mysql php5-mcrypt php5-curl mysql-server cu
 # Install composer
 curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/bin
 
+# Install rocketeer
+wget http://rocketeer.autopergamene.eu/versions/rocketeer.phar -O /usr/local/bin/rocketeer
+chmod +x /usr/local/bin/rocketeer
+
 # Update hostname
 # TODO: check this is the proper way
 echo "127.0.1.1 $NEW_HOSTNAME" >> /etc/hosts
@@ -119,27 +123,9 @@ chown vagrant:vagrant ~vagrant/.my.cnf
 sudo -u vagrant mysql -e "CREATE DATABASE $MYSQL_DB"
 
 # Set .env
-tee > "/vagrant/.env" <<EOF
-APP_ENV=local
-APP_DEBUG=true
-APP_KEY=SomeRandomString
-
-DB_HOST=localhost
-DB_DATABASE=$MYSQL_DB
-DB_USERNAME=root
-DB_PASSWORD=$MYSQL_PASSWORD
-
-CACHE_DRIVER=file
-SESSION_DRIVER=file
-QUEUE_DRIVER=sync
-
-MAIL_DRIVER=smtp
-MAIL_HOST=mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-EOF
+replace "DB_DATABASE=homestead" "DB_DATABASE=$MYSQL_DB" \
+    "DB_USERNAME=homestead" "DB_USERNAME=root" \
+    "DB_PASSWORD=secret" "DB_PASSWORD=$MYSQL_PASSWORD" < /vagrant/.env.example > /vagrant/.env
 
 # Application setup
 cd /vagrant
