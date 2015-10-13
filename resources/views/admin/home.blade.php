@@ -73,9 +73,9 @@
                                 <td>
                                     {{ $file->client_name }}
                                 </td>
-                                <td>
+                                <td class="collapsing">
                                     <a href="{{ $file->url() }}" target="_blank">{{ $file->generated_name }}</a>
-                                    <button name="delete" value="{{ $file->id }}" class="ui red mini button">Delete</button>
+                                    <button name="delete" value="{{ $file->id }}" class="ui red mini button" onclick="return confirm('Are you sure?');">Delete</button>
                                 </td>
                                 <td>
                                     {{ $file->created_at }}
