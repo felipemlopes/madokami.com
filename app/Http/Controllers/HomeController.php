@@ -51,7 +51,6 @@ class HomeController extends Controller {
                     $exported[] = $record->toArray();
                 }
                 else {
-                    dd($file->getError(), $file->getErrorMessage());
                     throw new UploadException();
                 }
             }
