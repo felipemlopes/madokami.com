@@ -55,7 +55,11 @@ class HomeController extends Controller {
                 }
             }
 
-            return response()->json([ 'success' => true, 'files' => $exported ]);
+            $headers = [
+                'X-File-Url' => $exported[0]['url'],
+            ];
+
+            return response()->json([ 'success' => true, 'files' => $exported ], 200, $headers);
         }
     }
 
