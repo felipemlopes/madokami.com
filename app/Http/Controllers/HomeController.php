@@ -14,6 +14,7 @@ use Madokami\Exceptions\NoFileException;
 use Madokami\Formatters\FileSizeFormatter;
 use Madokami\Models\FileRecord;
 use Madokami\Upload\FileUpload;
+use Madokami\VirusTotal\Api\Client;
 use Storage;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -28,6 +29,9 @@ class HomeController extends Controller {
     }
 
     public function home() {
+
+        //$client = new Client(config('virustotal.api_key'));
+        //dd($client->report('51ca34d11b96b978799ff026302b7d2eeea3e05d710cde0e76a8b691050e6426'));
 
         $maxUploadSize = config('upload.max_size');
         $displayMaxUploadSize = FileSizeFormatter::format($maxUploadSize);

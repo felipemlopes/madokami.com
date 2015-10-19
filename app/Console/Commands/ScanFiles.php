@@ -3,6 +3,8 @@
 namespace Madokami\Console\Commands;
 
 use Illuminate\Console\Command;
+use Madokami\Models\FileRecord;
+use Madokami\VirusTotal\File as VirusTotalFile;
 
 class ScanFiles extends Command
 {
@@ -37,6 +39,21 @@ class ScanFiles extends Command
      */
     public function handle()
     {
+        $file = FileRecord::findOrFail(39);
+
+        $virusTotal = new VirusTotalFile(config('virustotal.api_key'));
+        $result = $virusTotal->privateUploadUrl();
+        $privateUploadUrl = $result['upload_url'];
+
+        $this->output->writeln($privateUploadUrl);
+
+        $this->output->writeln($file->filePath());
+
+        $privateUploadUrl = str_replace('https:', 'http:', $privateUploadUrl);
+
+        $result = $virusTotal->privateScan($privateUploadUrl, $file->filePath());
+
+        dd($result);
 
     }
 }

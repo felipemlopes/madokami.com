@@ -80,4 +80,13 @@ class FileRecord extends Model {
         }
     }
 
+    public function filePath() {
+        if($this->trashed()) {
+            return config('upload.deleted_directory').'/'.$this->generated_name;
+        }
+        else {
+            return config('upload.directory').'/'.$this->generated_name;
+        }
+    }
+
 }
