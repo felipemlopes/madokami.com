@@ -46,11 +46,11 @@ class ScanFiles extends Command
      */
     public function handle()
     {
-        $files = FileRecord::all();
-
-        foreach($files as $file) {
-            $this->scanFile($file);
-        }
+        FileRecord::chunk(100, function($files) {
+            foreach($files as $file) {
+                $this->scanFile($file);
+            }
+        });
     }
 
     protected function scanFile(FileRecord $file) {
@@ -61,6 +61,9 @@ class ScanFiles extends Command
 
             $this->throttler->throttle(1);
             $result = $virusTotal->getReport($file->hash);
+
+            $file->scan_checked_at = Carbon::now();
+            $file->save();
 
             if ($result['response_code'] === 1) {
                 $scannedAt = new Carbon($result['scan_date']);
@@ -86,13 +89,14 @@ class ScanFiles extends Command
                     $file->scan_requested_at = null;
                     $file->save();
 
-                    $this->actionScanResult($file, $scan);
+                    $deleted = $this->actionScanResult($file, $scan);
 
-                    return;
+                    if($deleted) {
+                        // Nothing else to do if deleted
+                        return;
+                    }
                 }
             }
-
-            $file->scan_checked_at = Carbon::now();
         }
 
         if($file->shouldScanFile()) {
@@ -124,7 +128,10 @@ class ScanFiles extends Command
 
         if($detectionRatio >= config('virustotal.detection_threshold')) {
             $this->info(sprintf('Deleting file: %s (#%d)', $file->client_name, $file->id));
-            $file->delete();
+            return $file->delete();
+        }
+        else {
+            return false;
         }
     }
 }
