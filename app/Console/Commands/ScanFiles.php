@@ -46,11 +46,35 @@ class ScanFiles extends Command
      */
     public function handle()
     {
-        FileRecord::chunk(100, function($files) {
-            foreach($files as $file) {
-                $this->scanFile($file);
-            }
-        });
+        if($this->tryExclusiveLock()) {
+            sleep(5);
+            FileRecord::chunk(100, function ($files) {
+                foreach ($files as $file) {
+                    $this->scanFile($file);
+                }
+            });
+        }
+    }
+
+    protected function tryExclusiveLock() {
+        $lockFile = storage_path('app/scan_files_lock');
+
+        if(!file_exists($lockFile)) {
+            touch($lockFile);
+        }
+
+        $fh = fopen($lockFile, 'r+');
+
+        if(!flock($fh, LOCK_EX | LOCK_NB)) {
+            $this->error('Failed to obtain exclusive lock');
+            return false;
+        }
+
+        register_shutdown_function(function($fh) {
+            fclose($fh);
+        }, $fh, $lockFile);
+
+        return true;
     }
 
     protected function scanFile(FileRecord $file) {
