@@ -64,6 +64,9 @@ class Handler extends ExceptionHandler
             if($e instanceof MaxUploadSizeException) {
                 $response['error'] = 'File too big.';
             }
+            elseif($e instanceof DisallowedFileTypeException) {
+                $response['error'] = 'Disallowed file type.';
+            }
             else {
                 $response['error'] = 'Server error.';
             }

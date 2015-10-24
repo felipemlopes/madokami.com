@@ -10,6 +10,8 @@ namespace Madokami\Http\Controllers;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Madokami\Exceptions\DisallowedFileTypeException;
 use Madokami\Exceptions\NoFileException;
 use Madokami\Formatters\FileSizeFormatter;
 use Madokami\Models\FileRecord;
@@ -47,6 +49,11 @@ class HomeController extends Controller {
             /** @var UploadedFile $file */
             foreach($request->files as $file) {
                 if($file->isValid()) {
+                    // Don't allow .exe files
+                    if(strcasecmp($file->getClientOriginalExtension(), 'exe') === 0) {
+                        throw new DisallowedFileTypeException();
+                    }
+
                     $record = $this->fileUpload->uploadFile($file, $request->getClientIp());
                     $exported[] = $record->toArray();
                 }
