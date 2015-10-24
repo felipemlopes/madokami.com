@@ -2,7 +2,12 @@
 
 namespace Madokami\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Madokami\Models\FileRecord;
+use Madokami\Models\Scan;
+use Madokami\VirusTotal\ApiThrottler;
+use Madokami\VirusTotal\File as VirusTotalFile;
 
 class ScanFiles extends Command
 {
@@ -11,7 +16,7 @@ class ScanFiles extends Command
      *
      * @var string
      */
-    protected $signature = 'scan-files';
+    protected $signature = 'files:scan';
 
     /**
      * The console command description.
@@ -20,14 +25,18 @@ class ScanFiles extends Command
      */
     protected $description = 'Scan uploads for infected files.';
 
+    protected $throttler;
+
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ApiThrottler $throttler)
     {
         parent::__construct();
+
+        $this->throttler = $throttler;
     }
 
     /**
@@ -37,6 +46,92 @@ class ScanFiles extends Command
      */
     public function handle()
     {
+        FileRecord::chunk(100, function($files) {
+            foreach($files as $file) {
+                $this->scanFile($file);
+            }
+        });
+    }
 
+    protected function scanFile(FileRecord $file) {
+        $virusTotal = new VirusTotalFile(config('virustotal.api_key'));
+
+        if($file->shouldCheckScan()) {
+            $this->info(sprintf('Checking scan for file: %s (#%d)', $file->client_name, $file->id));
+
+            $this->throttler->throttle(1);
+            $result = $virusTotal->getReport($file->hash);
+
+            $file->scan_checked_at = Carbon::now();
+            $file->save();
+
+            if ($result['response_code'] === 1) {
+                $scannedAt = new Carbon($result['scan_date']);
+                $cutoff = new Carbon('-2 weeks');
+
+                // Check if this scan record already exists in DB
+                $exists = (Scan::where('virustotal_scan_id', '=', $result['scan_id'])->count() > 0);
+
+                if ($scannedAt->gte($cutoff) && !$exists) {
+                    /** @var Scan $scan */
+                    $scan = Scan::create([
+                        'file_record_id' => $file->id,
+                        'virustotal_scan_id' => $result['scan_id'],
+                        'total' => $result['total'],
+                        'positives' => $result['positives'],
+                        'scanned_at' => $scannedAt,
+                        'scans' => $result['scans'],
+                    ]);
+
+                    $this->info(sprintf('Scan result: %d/%d', $scan->positives, $scan->total));
+
+                    // We now have a report from a requested scan
+                    $file->scan_requested_at = null;
+                    $file->save();
+
+                    $deleted = $this->actionScanResult($file, $scan);
+
+                    if($deleted) {
+                        // Nothing else to do if deleted
+                        return;
+                    }
+                }
+            }
+        }
+
+        if($file->shouldScanFile()) {
+            $this->info(sprintf('Uploading file for scan: %s (#%d)', $file->client_name, $file->id));
+
+            $this->throttler->throttle(1);
+            $result = $virusTotal->scan($file->filePath());
+
+            if ($result['response_code'] === 1) {
+                $file->scan_requested_at = Carbon::now();
+                $file->save();
+            }
+        }
+        elseif($file->shouldRescanFile()) {
+            $this->info(sprintf('Requesting re-scan for file: %s (#%d)', $file->client_name, $file->id));
+
+            $this->throttler->throttle(1);
+            $result = $virusTotal->rescan($file->hash);
+
+            if ($result['response_code'] === 1) {
+                $file->scan_requested_at = Carbon::now();
+                $file->save();
+            }
+        }
+    }
+
+    protected function actionScanResult(FileRecord $file, Scan $scan) {
+        $detectionRatio = $scan->positives / $scan->total;
+
+        if($detectionRatio >= config('virustotal.detection_threshold')) {
+            $this->info(sprintf('Deleting file: %s (#%d)', $file->client_name, $file->id));
+            return $file->delete();
+        }
+        else {
+            return false;
+        }
     }
 }
