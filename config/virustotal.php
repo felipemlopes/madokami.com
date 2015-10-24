@@ -24,4 +24,10 @@ return [
      */
     'detection_threshold' => 0.2,
 
+    /*
+     * The requests/minute value for your API key
+     * See your API settings on https://www.virustotal.com/ to get this value
+     */
+    'requests_per_minute' => 10,
+
 ];

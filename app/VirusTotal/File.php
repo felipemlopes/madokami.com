@@ -29,7 +29,7 @@ class File extends BaseFile {
             $response = $data->send();
         }
         catch(ServerErrorResponseException $exception) {
-            dd($exception->getResponse()->getBody(true));
+            dd($exception->getRequest()->__toString(), $exception->getResponse()->getBody(true));
         }
 
         return $data->send()->json();

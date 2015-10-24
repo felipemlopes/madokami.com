@@ -14,9 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        FileRecord::deleting(function($fileRecord) {
-            $fileRecord->deleteFile();
-        });
+        $this->fileRecordDeletingListener();
     }
 
     /**
@@ -27,5 +25,11 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    protected function fileRecordDeletingListener() {
+        FileRecord::deleting(function($fileRecord) {
+            $fileRecord->deleteFile();
+        });
     }
 }
