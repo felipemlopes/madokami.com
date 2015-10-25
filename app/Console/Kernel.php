@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \Madokami\Console\Commands\ScanFiles::class,
+        \Madokami\Console\Commands\FixHashes::class,
     ];
 
     /**
