@@ -59,6 +59,12 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="ui info message">
+                <p>
+                    All files are scanned by <a href="https://www.virustotal.com/" target="_blank" rel="nofollow">VirusTotal</a> on upload. If a file is infected it will be removed without further notice.
+                </p>
+            </div>
         </div>
 
         <footer id="footer">
