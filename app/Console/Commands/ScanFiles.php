@@ -51,6 +51,10 @@ class ScanFiles extends Command
             FileRecord::whereRaw('RIGHT(client_name, 4) NOT IN (".png", ".jpg", "jpeg", "webm", ".gif")')
                 ->chunk(100, function ($files) {
                 foreach ($files as $file) {
+                    if(empty($file->hash)) {
+                        continue;
+                    }
+
                     try {
                         $this->scanFile($file);
                     }
