@@ -8,6 +8,7 @@ use Madokami\Models\FileRecord;
 use Madokami\Models\Scan;
 use Madokami\VirusTotal\ApiThrottler;
 use Madokami\VirusTotal\File as VirusTotalFile;
+use VirusTotal\Exceptions\RateLimitException;
 
 class ScanFiles extends Command
 {
@@ -47,10 +48,15 @@ class ScanFiles extends Command
     public function handle()
     {
         if($this->tryExclusiveLock()) {
-            sleep(5);
             FileRecord::chunk(100, function ($files) {
                 foreach ($files as $file) {
-                    $this->scanFile($file);
+                    try {
+                        $this->scanFile($file);
+                    }
+                    catch(RateLimitException $exception) {
+                        $this->error('Rate limit hit');
+                        sleep(60);
+                    }
                 }
             });
         }
