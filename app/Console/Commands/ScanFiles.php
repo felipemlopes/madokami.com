@@ -134,14 +134,20 @@ class ScanFiles extends Command
         }
 
         if($file->shouldScanFile()) {
-            $this->info(sprintf('Uploading file for scan: %s (#%d)', $file->client_name, $file->id));
+            // Max filesize for public API is 32mb
+            if($file->filesize <= (32 * pow(1024, 2))) {
+                $this->info(sprintf('Uploading file for scan: %s (#%d)', $file->client_name, $file->id));
 
-            $this->throttler->throttle(1);
-            $result = $virusTotal->scan($file->filePath());
+                $this->throttler->throttle(1);
+                $result = $virusTotal->scan($file->filePath());
 
-            if ($result['response_code'] === 1) {
-                $file->scan_requested_at = Carbon::now();
-                $file->save();
+                if ($result['response_code'] === 1) {
+                    $file->scan_requested_at = Carbon::now();
+                    $file->save();
+                }
+            }
+            else {
+                // TODO: private API
             }
         }
         elseif($file->shouldRescanFile()) {
