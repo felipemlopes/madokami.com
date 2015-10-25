@@ -40,10 +40,16 @@ class FixHashes extends Command
     {
         $files = FileRecord::withTrashed()->where('hash', '=', '')->get();
 
+        /** @var FileRecord $file */
         foreach($files as $index => $file) {
-            $fileHash = hash_file('sha256', $file->filePath());
-            $file->hash = $fileHash;
-            $file->save();
+            if($file->fileExists()) {
+                $fileHash = hash_file('sha256', $file->filePath());
+                $file->hash = $fileHash;
+                $file->save();
+            }
+            else {
+                $this->output->error('File doesn\'t exist: '.$file->filePath());
+            }
 
             $this->output->write(sprintf("\r%d/%d", ($index +1), $files->count()));
         }

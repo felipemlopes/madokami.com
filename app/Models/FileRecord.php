@@ -109,6 +109,10 @@ class FileRecord extends Model {
         }
     }
 
+    public function fileExists() {
+        return file_exists($this->filePath());
+    }
+
     public function shouldScanFile() {
         if($this->scans()->count() > 0) {
             // Don't scan if we already have a scan record
