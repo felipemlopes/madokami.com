@@ -48,7 +48,8 @@ class ScanFiles extends Command
     public function handle()
     {
         if($this->tryExclusiveLock()) {
-            FileRecord::chunk(100, function ($files) {
+            FileRecord::whereRaw('RIGHT(client_name, 4) NOT IN (".png", ".jpg", "jpeg", "webm", ".gif")')
+                ->chunk(100, function ($files) {
                 foreach ($files as $file) {
                     try {
                         $this->scanFile($file);
@@ -56,6 +57,9 @@ class ScanFiles extends Command
                     catch(RateLimitException $exception) {
                         $this->error('Rate limit hit');
                         sleep(60);
+                    }
+                    catch(\Exception $exception) {
+                        $this->error($exception);
                     }
                 }
             });
