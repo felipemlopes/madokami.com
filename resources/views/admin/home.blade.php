@@ -61,6 +61,7 @@
                 <table class="ui sortable celled table">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Original</th>
                             <th>File</th>
                             <th>Uploaded</th>
@@ -70,6 +71,7 @@
                     <tbody>
                         @foreach($files as $file)
                             <tr>
+                                <td>{{ $file->id }}</td>
                                 <td>
                                     {{ $file->client_name }}
                                 </td>
